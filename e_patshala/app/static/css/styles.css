@@ -1,0 +1,57 @@
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    background-color: #f4f4f4;
+}
+
+.header, .footer {
+    background: #333;
+    color: #fff;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 10px;
+}
+
+.hero {
+    background: #e9ecef;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.hero h1 {
+    margin: 0;
+    color: #333;
+}
+
+.actions {
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff;
+    border-radius: 5px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+}

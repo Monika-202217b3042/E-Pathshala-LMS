@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - E-Pathshala{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Welcome to E-Pathshala!</h1>
+    <p>Your journey towards a better learning experience starts here.</p>
+    <div class="actions">
+        <a href="{{ url_for('main.login') }}" class="btn btn-primary">Login</a>
+        <a href="{{ url_for('main.register') }}" class="btn btn-secondary">Sign Up</a>
+    </div>
+</div>
+{% endblock %}
