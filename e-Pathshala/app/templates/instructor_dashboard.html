@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Pathshala - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #212529;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-buttons a {
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-left: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .dashboard-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .dashboard-btn i,
+        .logout-btn i {
+            margin-right: 5px;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .welcome-text {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .course-section {
+            margin-top: 30px;
+        }
+
+        .create-btn {
+            background-color: #198754;
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .create-btn:hover {
+            background-color: #145c38;
+        }
+
+        .no-courses {
+            color: gray;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>E-Pathshala</h1>
+        <div class="nav-buttons">
+            <a href="/dashboard" class="dashboard-btn"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="/logout" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <p class="welcome-text">Welcome back, {{ 'Ajay' }}!</p>
+
+        <div class="course-section">
+            <h3>Your Courses</h3>
+            <!-- Updated Button with Clickable Link -->
+            <a href="/create-course" class="create-btn">
+                <i class="fas fa-plus"></i> Create New Course
+            </a>
+            <p class="no-courses">No courses to display.</p>
+        </div>
+    </div>
+</body>
+</html>
