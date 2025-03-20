@@ -4,6 +4,12 @@ from .models import User, Course, Enrollment
 
 main = Blueprint('main', __name__)
 
+def get_current_user():
+    """Helper function to get the currently logged-in user."""
+    if 'user_id' not in session:
+        return None
+    return User.query.get(session['user_id'])
+
 @main.route('/')
 def index():
     return render_template('index.html')
@@ -19,18 +25,17 @@ def dashboard():
         flash('User not found. Please log in again.')
         return redirect(url_for('main.login'))
 
-    if user.is_instructor:
-        courses = user.courses
-        template = 'instructor_dashboard.html'
-    else:
-        enrolled_courses = Enrollment.query.filter_by(student_id=user.id).all()
-        courses = []
+    total_users = User.query.count()
+    total_courses = Course.query.count()
+    total_enrollments = Enrollment.query.count()
 
-        for enrollment in enrolled_courses:
-            course = Course.query.get(enrollment.course_id)
-            courses.append({"title": course.title, "progress": enrollment.progress})
-
-        template = 'student_dashboard.html'
+    return render_template(
+        'instructor_dashboard.html', 
+        user=user, 
+        total_users=total_users, 
+        total_courses=total_courses, 
+        total_enrollments=total_enrollments
+    )
 
     return render_template(template, user=user, courses=courses)
 
@@ -42,12 +47,10 @@ def login():
         user = User.query.filter_by(username=username).first()
 
         if user and user.check_password(password):
-            session['logged_in'] = True
             session['user_id'] = user.id
             flash("Login successful!", "success")
             return redirect(url_for('main.dashboard'))
-        
-        flash('Invalid username or password', "danger")
+        flash("Invalid username or password", "danger")
     return render_template('login.html')
 
 @main.route('/register', methods=['GET', 'POST'])
@@ -57,7 +60,8 @@ def register():
         password = request.form['password']
         is_instructor = 'is_instructor' in request.form
 
-        new_user = User(username=username, password=password, is_instructor=is_instructor)
+        new_user = User(username=username, is_instructor=is_instructor)
+        new_user.set_password(password)  # Secure password hashing
         db.session.add(new_user)
         db.session.commit()
         flash("Registration successful! You can now log in.", "success")
@@ -66,30 +70,24 @@ def register():
 
 @main.route('/logout')
 def logout():
-    session.pop('logged_in', None)
-    session.pop('user_id', None)
+    session.clear()
     flash("You have been logged out.", "info")
     return redirect(url_for('main.index'))
 
 @main.route('/create-course', methods=['GET', 'POST'])
 def create_course():
-    if not session.get('user_id'):
-        flash("Please log in first.", "warning")
-        return redirect(url_for('main.login'))
-
-    user = User.query.get(session['user_id'])
-    if not user.is_instructor:
+    user = get_current_user()
+    if not user or not user.is_instructor:
         flash("Unauthorized! Only instructors can create courses.", "danger")
         return redirect(url_for('main.dashboard'))
 
     if request.method == 'POST':
         title = request.form['title']
         description = request.form['description']
-
+        
         course = Course(title=title, description=description, instructor_id=user.id)
         db.session.add(course)
         db.session.commit()
-        
         flash("Course created successfully!", "success")
         return redirect(url_for('main.dashboard'))
 
@@ -114,26 +112,20 @@ def delete_course(course_id):
     flash("Course deleted successfully!", "success")
     return redirect(url_for('main.dashboard'))
 
-@main.route('/enroll_in_course/<int:course_id>', methods=['GET', 'POST'])
+@main.route('/enroll_in_course/<int:course_id>', methods=['POST'])
 def enroll_in_course(course_id):
-    if 'user_id' not in session:
-        flash("Please log in to view this page.", "warning")
-        return redirect(url_for('main.login'))
-
-    current_user = User.query.get(session['user_id'])
-    if current_user is None:
-        flash('User not found. Please log in again.', "danger")
+    user = get_current_user()
+    if not user:
+        flash("Please log in first.", "warning")
         return redirect(url_for('main.login'))
 
     course = Course.query.get_or_404(course_id)
-    is_enrolled = Enrollment.query.filter_by(student_id=current_user.id, course_id=course.id).first()
-
-    if not is_enrolled:
-        enrollment = Enrollment(student_id=current_user.id, course_id=course.id, progress=0)
+    if not Enrollment.query.filter_by(student_id=user.id, course_id=course.id).first():
+        enrollment = Enrollment(student_id=user.id, course_id=course.id, progress=0)
         db.session.add(enrollment)
         db.session.commit()
-        flash('You have been enrolled in the course!', "success")
+        flash("You have been enrolled in the course!", "success")
     else:
-        flash('You are already enrolled in this course.', "info")
-
+        flash("You are already enrolled in this course.", "info")
+    
     return redirect(url_for('main.dashboard'))
