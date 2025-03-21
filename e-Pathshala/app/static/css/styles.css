@@ -1,5 +1,6 @@
+/* Full viewport height with a centered layout */
 body, html {
-    height: 100vh; /* Full viewport height */
+    height: 100vh; /* Full height */
     margin: 0;
     font-family: Arial, sans-serif;
     display: flex;
@@ -7,38 +8,47 @@ body, html {
     align-items: center;
     background: url('/static/images/background.jpg') no-repeat center center;
     background-size: cover;
-    overflow: hidden; /* Prevent scrolling */
+    overflow-x: hidden; /* Prevents horizontal scrolling */
+    overflow-y: auto; /* Allows vertical scrolling */
 }
 
+/* Centered container with a semi-transparent background */
 .container {
-    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
     padding: 20px;
     border-radius: 8px;
-    width: 100%;
-    max-width: 400px;
+    width: 90%; /* More flexible width */
+    max-width: 500px; /* Increased for better layout */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* Center align headers */
 h1, h2 {
     text-align: center;
 }
 
+/* Form styling */
 form {
     display: flex;
     flex-direction: column;
 }
 
+/* Form group spacing */
 .form-group {
     margin-bottom: 15px;
 }
 
+/* Input fields with improved padding and border */
 input[type='text'], input[type='password'], input[type='email'], textarea {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1.5px solid #aaa; /* Improved border */
     border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box; /* Prevents layout issues */
 }
 
+/* Button styling with hover effects */
 button {
     background-color: #007bff;
     color: white;
@@ -53,10 +63,24 @@ button:hover {
     background-color: #0056b3;
 }
 
+/* Alert message styling */
 .alert {
     color: #721c24;
     background-color: #f8d7da;
     padding: 10px;
     margin-bottom: 20px;
     border-radius: 4px;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+        max-width: 90%;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 10px;
+    }
 }
