@@ -28,10 +28,14 @@ def dashboard():
     if user.is_instructor:
         courses = Course.query.filter_by(instructor_id=user.id).all()
         total_courses = len(courses)
-        total_enrollments = sum(len(course.enrollments) for course in courses)
+        student_ids = set()
+        total_enrollments = 0
 
-                # Collect all unique student IDs in all courses taught by the instructor
-        student_ids = {enrollment.student_id for course in courses for enrollment in course.enrollments}
+        for course in courses:
+            enrollments = Enrollment.query.filter_by(course_id=course.id).all()
+            total_enrollments += len(enrollments)
+            for enrollment in enrollments:
+                student_ids.add(enrollment.student_id)
         total_students = len(student_ids)
 
         return render_template(
@@ -54,7 +58,7 @@ def dashboard():
         )
 
     return render_template(template, user=user, courses=courses)
-
+    
 @main.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
