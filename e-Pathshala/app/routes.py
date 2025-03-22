@@ -48,8 +48,7 @@ def login():
 
         if user and user.check_password(password):
             session['user_id'] = user.id
-            flash("Login successful!", "success")
-            return redirect(url_for('main.dashboard'))
+            return redirect(url_for('main.dashboard'))  # Removed flash message
         flash("Invalid username or password", "danger")
     return render_template('login.html')
 
@@ -59,9 +58,8 @@ def register():
         username = request.form['username']
         password = request.form['password']
         is_instructor = 'is_instructor' in request.form
-
-        new_user = User(username=username, is_instructor=is_instructor)
-        new_user.set_password(password)  # Secure password hashing
+        
+        new_user = User(username=username, password=password, is_instructor=is_instructor)
         db.session.add(new_user)
         db.session.commit()
         flash("Registration successful! You can now log in.", "success")
@@ -71,7 +69,6 @@ def register():
 @main.route('/logout')
 def logout():
     session.clear()
-    flash("You have been logged out.", "info")
     return redirect(url_for('main.index'))
 
 @main.route('/create-course', methods=['GET', 'POST'])
