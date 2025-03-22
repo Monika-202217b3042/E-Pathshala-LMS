@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Enrollments Overview</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Course</th>
+                <th>Progress</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for enrollment in enrollments %}
+            <tr>
+                <td>{{ enrollment.student.username }}</td>
+                <td>{{ enrollment.course.title }}</td>
+                <td>{{ enrollment.progress }}%</td>
+            </tr>
+            {% else %}
+            <p>No enrollments found.</p>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

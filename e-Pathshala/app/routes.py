@@ -24,33 +24,33 @@ def dashboard():
     if user is None:
         flash('User not found. Please log in again.')
         return redirect(url_for('main.login'))
-
-    total_users = User.query.count()
-    total_courses = Course.query.count()
-    total_enrollments = Enrollment.query.count()
     
     if user.is_instructor:
         courses = Course.query.filter_by(instructor_id=user.id).all()
-        total_users = User.query.count()
-        total_courses = Course.query.count()
-        total_enrollments = Enrollment.query.count()
+        total_courses = len(courses)
+        total_enrollments = sum(len(course.enrollments) for course in courses)
+
+                # Collect all unique student IDs in all courses taught by the instructor
+        student_ids = {enrollment.student_id for course in courses for enrollment in course.enrollments}
+        total_students = len(student_ids)
 
         return render_template(
             'instructor_dashboard.html', 
             user=user, 
             courses=courses,  
-            total_users=total_users,
+            total_students=total_students,
             total_courses=total_courses, 
             total_enrollments=total_enrollments
         )
     else:
-        all_courses = Course.query.all()
-        courses = [(course, any(enrollment.course_id == course.id for enrollment in user.enrollments)) for course in all_courses]
+        courses_data = [(enrollment.course, enrollment.progress) for enrollment in user.enrollments]
+        available_courses = Course.query.filter(Course.id.notin_([en.course_id for en in user.enrollments])).all()
 
         return render_template(
             'student_dashboard.html', 
             user=user, 
-            courses=courses  
+            courses=courses_data,
+            available_courses=available_courses  
         )
 
     return render_template(template, user=user, courses=courses)
@@ -152,3 +152,30 @@ def courses():
 
     courses = Course.query.filter_by(instructor_id=user.id).all()
     return render_template('courses.html', courses=courses)
+
+
+
+@main.route('/students')
+def students():
+    user = get_current_user()
+    if not user or not user.is_instructor:
+        flash("Unauthorized! Only instructors can create courses.", "danger")
+        return redirect(url_for('main.dashboard'))
+    
+    # Fetch all unique students from the instructor’s courses
+    student_ids = {enrollment.student_id for course in user.courses for enrollment in course.enrollments}
+    students = User.query.filter(User.id.in_(student_ids)).all()
+    
+    return render_template('students.html', students=students)
+
+@main.route('/enrollments')
+def enrollments():
+    user = get_current_user()
+    if not user or not user.is_instructor:
+        flash("Unauthorized! Only instructors can create courses.", "danger")
+        return redirect(url_for('main.dashboard'))
+    
+    # Get enrollments specific to this instructor by checking courses taught by the instructor
+    enrollments = Enrollment.query.filter(Enrollment.course.has(instructor_id=user.id)).all()
+    
+    return render_template('enrollments.html', enrollments=enrollments)
