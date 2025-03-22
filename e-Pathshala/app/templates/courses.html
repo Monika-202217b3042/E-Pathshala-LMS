@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Course Management</h1>
+    <div class="list-group mt-4">
+        {% for course in courses %}
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <h5>{{ course.title }}</h5>
+                <p class="mb-1">{{ course.description }}</p>
+            </div>
+            <div>
+                <a href="{{ url_for('main.edit_course', course_id=course.id) }}" class="btn btn-sm btn-primary">Edit</a>
+                <a href="{{ url_for('main.delete_course', course_id=course.id) }}" class="btn btn-sm btn-danger">Delete</a>
+            </div>
+        </div>
+        {% else %}
+        <p class="text-muted">No courses available.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

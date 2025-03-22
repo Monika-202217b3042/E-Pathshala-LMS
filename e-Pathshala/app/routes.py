@@ -28,14 +28,30 @@ def dashboard():
     total_users = User.query.count()
     total_courses = Course.query.count()
     total_enrollments = Enrollment.query.count()
+    
+    if user.is_instructor:
+        courses = Course.query.filter_by(instructor_id=user.id).all()
+        total_users = User.query.count()
+        total_courses = Course.query.count()
+        total_enrollments = Enrollment.query.count()
 
-    return render_template(
-        'instructor_dashboard.html', 
-        user=user, 
-        total_users=total_users, 
-        total_courses=total_courses, 
-        total_enrollments=total_enrollments
-    )
+        return render_template(
+            'instructor_dashboard.html', 
+            user=user, 
+            courses=courses,  
+            total_users=total_users,
+            total_courses=total_courses, 
+            total_enrollments=total_enrollments
+        )
+    else:
+        all_courses = Course.query.all()
+        courses = [(course, any(enrollment.course_id == course.id for enrollment in user.enrollments)) for course in all_courses]
+
+        return render_template(
+            'student_dashboard.html', 
+            user=user, 
+            courses=courses  
+        )
 
     return render_template(template, user=user, courses=courses)
 
@@ -126,3 +142,13 @@ def enroll_in_course(course_id):
         flash("You are already enrolled in this course.", "info")
     
     return redirect(url_for('main.dashboard'))
+
+@main.route('/courses')
+def courses():
+    user = get_current_user()
+    if not user or not user.is_instructor:
+        flash("Unauthorized! Only instructors can create courses.", "danger")
+        return redirect(url_for('main.dashboard'))
+
+    courses = Course.query.filter_by(instructor_id=user.id).all()
+    return render_template('courses.html', courses=courses)
