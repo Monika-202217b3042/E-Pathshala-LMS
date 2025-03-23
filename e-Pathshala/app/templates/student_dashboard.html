@@ -5,13 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard - E-Pathshala</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Custom Styles */
+        .navbar .btn-primary {
+            background-color: #007bff; /* Blue for Home */
+            border: none;
+        }
+
+        .navbar .btn-primary:hover {
+            background-color: #0056b3; /* Darker Blue */
+        }
+
+        .navbar .btn-success {
+            background-color: #28a745; /* Green for Dashboard */
+            border: none;
+        }
+
+        .navbar .btn-success:hover {
+            background-color: #218838; /* Darker Green */
+        }
+
+        .progress {
+            height: 20px;
+        }
+
+        .progress-bar {
+            font-weight: bold;
+            font-size: 14px;
+            background-color: #28a745 !important; /* Green Progress Bar */
+        }
+
+        .table th, .table td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        .enroll-section {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+
+        .btn-enroll {
+            width: 100px;
+            font-weight: bold;
+            background-color: #28a745; /* Green enroll button */
+            border: none;
+            color: white;
+        }
+
+        .btn-enroll:hover {
+            background-color: #218838; /* Darker Green */
+        }
+    </style>
+
 </head>
 <body>
     <nav class="navbar navbar-dark bg-dark p-3">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">E-Pathshala</a>
             <div>
-                <a href="/dashboard" class="btn btn-primary">Dashboard</a>
+                <a href="/" class="btn btn-primary">Home</a>
+                <a href="/dashboard" class="btn btn-success">Dashboard</a> <!-- Green Dashboard -->
                 <a href="/logout" class="btn btn-danger">Logout</a>
             </div>
         </div>
@@ -35,10 +93,10 @@
                     {% for course, progress in courses %}
                     <tr>
                         <td>{{ course.title }}</td>
-                        <td><span class="badge bg-success">Enrolled</span></td>
+                        <td><span class="badge bg-success">Enrolled</span></td> <!-- Green Badge -->
                         <td>
                             <div class="progress">
-                                <div class="progress-bar bg-success" style="width: {{ progress }}%;" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100">{{ progress }}%</div>
+                                <div class="progress-bar" style="width: {{ progress }}%;" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100">{{ progress }}%</div>
                             </div>
                         </td>
                     </tr>
@@ -48,13 +106,14 @@
                 </tbody>
             </table>
         </div>
+
         <div class="mt-4">
             <h3>Enroll in a New Course</h3>
             {% for course in available_courses %}
             <div class="mb-2">
                 {{ course.title }} - {{ course.description }}
                 <form action="{{ url_for('main.enroll_in_course', course_id=course.id) }}" method="post">
-                    <button type="submit" class="btn btn-primary">Enroll</button>
+                    <button type="submit" class="btn btn-enroll">Enroll</button> <!-- Green Enroll Button -->
                 </form>
             </div>
             {% endfor %}

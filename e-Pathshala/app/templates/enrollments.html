@@ -1,27 +1,62 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students Overview</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!-- Font Awesome -->
+</head>
+<body>
 
-{% block content %}
-<div class="container">
-    <h1>Enrollments Overview</h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Student</th>
-                <th>Course</th>
-                <th>Progress</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for enrollment in enrollments %}
-            <tr>
-                <td>{{ enrollment.student.username }}</td>
-                <td>{{ enrollment.course.title }}</td>
-                <td>{{ enrollment.progress }}%</td>
-            </tr>
-            {% else %}
-            <p>No enrollments found.</p>
-            {% endfor %}
-        </tbody>
-    </table>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">E-Pathshala</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="btn btn-primary me-2" href="/dashboard">Dashboard</a></li>
+                <li class="nav-item"><a class="btn btn-danger" href="/logout">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <!-- Centered Heading -->
+    <div class="text-center mb-4">  <!-- Added mb-4 for spacing -->
+        <h1><i class="fas fa-user-graduate"></i> Enrollments Overview</h1>
+    </div>
+
+    <!-- Table with extra margin -->
+    <div class="mt-4">  <!-- Moves table slightly down -->
+        <table class="table table-striped table-bordered">  <!-- Added striped and bordered for better design -->
+            <thead class="table-dark">  <!-- Dark background for header -->
+                <tr>
+                    <th>Student</th>
+                    <th>Course</th>
+                    <th>Progress</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for enrollment in enrollments %}
+                <tr>
+                    <td>{{ enrollment.student.username }}</td>
+                    <td>{{ enrollment.course.title }}</td>
+                    <td>{{ enrollment.progress }}%</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3" class="text-center">No enrollments found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
-{% endblock %}
+
+</body>
+</html>
