@@ -92,7 +92,7 @@
                 <tbody>
                     {% for course, progress in courses %}
                     <tr>
-                        <td>{{ course.title }}</td>
+                        <td><strong>{{ course.title }}</strong></td> <!-- Course Name Bold -->
                         <td><span class="badge bg-success">Enrolled</span></td> <!-- Green Badge -->
                         <td>
                             <div class="progress">
@@ -111,7 +111,7 @@
             <h3>Enroll in a New Course</h3>
             {% for course in available_courses %}
             <div class="mb-2">
-                {{ course.title }} - {{ course.description }}
+                <strong>{{ course.title }}</strong> - {{ course.description }} <!-- Course Name Bold -->
                 <form action="{{ url_for('main.enroll_in_course', course_id=course.id) }}" method="post">
                     <button type="submit" class="btn btn-enroll">Enroll</button> <!-- Green Enroll Button -->
                 </form>
