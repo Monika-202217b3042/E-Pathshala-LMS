@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class User(db.Model):
-    __tablename__ = 'user'
+    _tablename_ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
@@ -12,9 +12,7 @@ class User(db.Model):
     enrollments = db.relationship('Enrollment', back_populates='student')
     posts = db.relationship('Post', backref='author', lazy='dynamic')
 
-    
-
-    def __init__(self, username, password, is_instructor=False):
+    def _init_(self, username, password, is_instructor=False):
         self.username = username
         self.password_hash = generate_password_hash(password)
         self.is_instructor = is_instructor
@@ -24,6 +22,14 @@ class User(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    @property
+    def courses_enrolled(self):
+        return [enrollment.course for enrollment in self.enrollments]
+
+    @property
+    def performance(self):
+        return [{'course': enrollment.course.title, 'progress': enrollment.progress} for enrollment in self.enrollments]
 
 class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)

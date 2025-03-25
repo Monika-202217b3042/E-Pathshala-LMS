@@ -59,18 +59,6 @@
             border-radius: 5px;
             background-color: #f8f9fa;
         }
-
-        .btn-enroll {
-            width: 100px;
-            font-weight: bold;
-            background-color: #28a745; /* Green enroll button */
-            border: none;
-            color: white;
-        }
-
-        .btn-enroll:hover {
-            background-color: #218838; /* Darker Green */
-        }
     </style>
 
 </head>
@@ -82,6 +70,7 @@
                 <a href="/" class="btn btn-primary">Home</a>
                 <a href="/dashboard" class="btn btn-success">Dashboard</a> <!-- Green Dashboard -->
                 <a class="btn btn-profile me-2" href="{{ url_for('main.profile') }}">Profile</a> <!-- Updated Green Profile Button -->
+                <a class="btn btn-profile me-2" href="{{ url_for('main.course_dashboard') }}">Course Dashboard</a>
                 <a href="/logout" class="btn btn-danger">Logout</a>
             </div>
         </div>
@@ -104,7 +93,11 @@
                 <tbody>
                     {% for course, progress in courses %}
                     <tr>
-                        <td><strong>{{ course.title }}</strong></td> <!-- Course Name Bold -->
+                        <td>
+                            <a href="{{ url_for('main.course_detail', course_id=course.id) }}" class="btn btn-link">
+                              <strong>{{ course.title }}</strong>
+                            </a> <!-- Clickable Course Name -->
+                        </td>
                         <td><span class="badge bg-success">Enrolled</span></td> <!-- Green Badge -->
                         <td>
                             <div class="progress">
@@ -117,18 +110,6 @@
                     {% endfor %}
                 </tbody>
             </table>
-        </div>
-
-        <div class="mt-4">
-            <h3>Enroll in a New Course</h3>
-            {% for course in available_courses %}
-            <div class="mb-2">
-                <strong>{{ course.title }}</strong> - {{ course.description }} <!-- Course Name Bold -->
-                <form action="{{ url_for('main.enroll_in_course', course_id=course.id) }}" method="post">
-                    <button type="submit" class="btn btn-enroll">Enroll</button> <!-- Green Enroll Button -->
-                </form>
-            </div>
-            {% endfor %}
         </div>
     </div>
     {% endblock %}

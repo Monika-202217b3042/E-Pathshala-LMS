@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>{{ course.title }}</h1>
+    <p>{{ course.description }}</p>
+
+    <h3>Course Details</h3>
+    <p><strong>Instructor:</strong> {{ course.instructor.username }}</p>
+    <p><strong>Progress in Course:</strong> {% for enrollment in course.enrollments if enrollment.student_id == user.id %}
+        {{ enrollment.progress }}%</p>
+    {% endfor %}
+    <!-- Include additional course details or functionalities as needed -->
+</div>
+{% endblock %}

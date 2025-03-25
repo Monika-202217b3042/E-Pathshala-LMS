@@ -193,4 +193,30 @@ def profile():
     user = User.query.get(session['user_id'])  # Fetch user from database
     return render_template('profile.html', user=user)
 
+@main.route('/course_dashboard')
+def course_dashboard():
+    if 'user_id' not in session:
+        flash("Please log in to view this page.")
+        return redirect(url_for('main.login'))
+
+    user = User.query.get(session['user_id'])
+    if user is None:
+        flash('User not found. Please log in again.')
+        return redirect(url_for('main.login'))
     
+    available_courses = Course.query.filter(Course.id.notin_([en.course_id for en in user.enrollments])).all()
+    return render_template('course_dashboard.html', available_courses=available_courses) 
+
+@main.route('/course_detail/<int:course_id>')
+def course_detail(course_id):
+    if 'user_id' not in session:
+        flash("Please log in to view this page.")
+        return redirect(url_for('main.login'))
+    
+    user = User.query.get(session['user_id'])
+    course = Course.query.get_or_404(course_id)
+    if not any(enrollment.course_id == course.id for enrollment in user.enrollments):
+        flash("You are not enrolled in this course.", "warning")
+        return redirect(url_for('main.dashboard'))
+    
+    return render_template('course_detail.html', course=course, user=user)

@@ -89,8 +89,7 @@
     <h2 class="mt-3">{{ user.username }}</h2>
 
     <p><strong>ID:</strong> {{ user.id }}</p>
-    <p><strong>Gender:</strong> {{ user.gender if user.gender else "Not specified" }}</p>
-    <p><strong>Profession:</strong> {{ user.profession if user.profession else "Not specified" }}</p>
+    <p><strong>Profession:</strong> {{ "instructor" if user.is_instructor else "Student" }}</p>
     <p><strong>Learning Courses:</strong> {{ user.courses_enrolled|length }}</p>
 
     <!-- Courses Enrolled -->
@@ -105,7 +104,7 @@
             {% if user.courses_enrolled %}
                 {% for course in user.courses_enrolled %}
                     <tr>
-                        <td>{{ course }}</td>
+                        <td>{{ course.title }}</td>
                     </tr>
                 {% endfor %}
             {% else %}
@@ -123,7 +122,6 @@
             <tr>
                 <th>Courses</th>
                 <th>Progress</th>
-                <th>Marks</th>
                 <th>Certificate</th>
             </tr>
         </thead>
@@ -133,8 +131,7 @@
                     <tr>
                         <td>{{ record.course }}</td>
                         <td>{{ record.progress }}%</td>
-                        <td>{{ record.marks }}</td>
-                        <td>{{ "Yes" if record.certificate else "No" }}</td>
+                        <td>{{ "Yes" if record.progress == 100 else "No" }}</td>
                     </tr>
                 {% endfor %}
             {% else %}
