@@ -43,7 +43,7 @@
     <div class="container">
         <div class="form-container">
             <h2 class="text-center">Create Course</h2>
-            <form method="POST" action="{{ url_for('main.create_course') }}">
+            <form method="POST" action="{{ url_for('main.create_course') }}" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="title" class="form-label">Course Title</label>
                     <input type="text" class="form-control" id="title" name="title" placeholder="Enter Course Title" required>
@@ -52,6 +52,16 @@
                 <div class="mb-3">
                     <label for="description" class="form-label">Course Description</label>
                     <textarea class="form-control" id="description" name="description" rows="4" placeholder="Enter Course Description" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="video_url" class="form-label">Course Video URL (YouTube, Vimeo, etc.)</label>
+                    <input type="url" class="form-control" id="video_url" name="video_url" placeholder="Enter Video URL">
+                </div>
+
+                <div class="mb-3">
+                    <label for="video_file" class="form-label">Upload Course Video (MP4 only)</label>
+                    <input type="file" class="form-control" id="video_file" name="video_file" accept="video/mp4">
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100">Create Course</button>

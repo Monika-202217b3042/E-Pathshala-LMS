@@ -56,6 +56,19 @@
                     {{ progress }}%
                 </div>
             </div>
+            
+            <!-- 🎥 Course Video Section -->
+            <h3 class="mt-4">🎥 Course Video</h3>
+            {% if course.video_url %}
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" 
+                            src="{{ course.video_url }}" 
+                            allowfullscreen>
+                    </iframe>
+                </div>
+            {% else %}
+                <p class="text-muted">No video available for this course.</p>
+            {% endif %}
         </div>
     </div>
 </div>

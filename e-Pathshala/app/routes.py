@@ -113,12 +113,16 @@ def create_course():
 @main.route('/edit_course/<int:course_id>', methods=['GET', 'POST'])
 def edit_course(course_id):
     course = Course.query.get_or_404(course_id)
+
     if request.method == 'POST':
         course.title = request.form['title']
         course.description = request.form['description']
+        course.video_url = request.form['video_url']  # ✅ Save video URL
+
         db.session.commit()
         flash("Course updated successfully!", "success")
         return redirect(url_for('main.dashboard'))
+
     return render_template('edit_course.html', course=course)
 
 @main.route('/delete_course/<int:course_id>', methods=['POST'])

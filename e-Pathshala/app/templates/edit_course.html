@@ -1,9 +1,62 @@
 {% extends 'base.html' %}
 {% block content %}
 <h2>Edit Course</h2>
-<form method="post">
-    <input type="text" name="title" value="{{ course.title }}" required>
-    <textarea name="description">{{ course.description }}</textarea>
+
+<form method="post" onsubmit="return validateForm()">
+    <label for="title">Course Title</label>
+    <input type="text" id="title" name="title" value="{{ course.title }}" required>
+
+    <label for="description">Course Description</label>
+    <textarea id="description" name="description" required>{{ course.description }}</textarea>
+
+    <label for="video_url">Course Video URL</label>
+    <input type="url" id="video_url" name="video_url" value="{{ course.video_url }}" 
+           placeholder="Enter YouTube or Vimeo link" oninput="previewVideo()">
+
+    <div id="video_preview" style="margin-top: 15px;">
+        {% if course.video_url %}
+            <iframe id="video_frame" width="560" height="315" 
+                    src="{{ course.video_url }}" frameborder="0" allowfullscreen></iframe>
+        {% else %}
+            <p>No video available. Add a YouTube or Vimeo link.</p>
+        {% endif %}
+    </div>
+
     <button type="submit">Update Course</button>
 </form>
+
+<script>
+function previewVideo() {
+    let videoUrl = document.getElementById("video_url").value;
+    let videoFrame = document.getElementById("video_frame");
+
+    if (videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be")) {
+        videoUrl = videoUrl.replace("watch?v=", "embed/");
+    } else if (videoUrl.includes("vimeo.com")) {
+        let vimeoId = videoUrl.split("/").pop();
+        videoUrl = "https://player.vimeo.com/video/" + vimeoId;
+    } else {
+        videoUrl = "";
+    }
+
+    if (videoFrame) {
+        videoFrame.src = videoUrl;
+    } else {
+        document.getElementById("video_preview").innerHTML = 
+            videoUrl ? `<iframe id="video_frame" width="560" height="315" 
+            src="${videoUrl}" frameborder="0" allowfullscreen></iframe>` 
+            : "<p>No valid video URL.</p>";
+    }
+}
+
+function validateForm() {
+    let videoUrl = document.getElementById("video_url").value;
+    if (videoUrl && !(videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be") || videoUrl.includes("vimeo.com"))) {
+        alert("Please enter a valid YouTube or Vimeo link.");
+        return false;
+    }
+    return true;
+}
+</script>
+
 {% endblock %}
