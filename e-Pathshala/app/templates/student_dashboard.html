@@ -17,16 +17,7 @@
             background-color: #0056b3; /* Darker Blue */
         }
 
-        .navbar .btn-success {
-            background-color: #28a745; /* Green for Dashboard */
-            border: none;
-        }
-
-        .navbar .btn-success:hover {
-            background-color: #218838; /* Darker Green */
-        }
-
-        /* Updated Profile Button (Purple) */
+        /* Profile Button (Purple) */
         .navbar .btn-profile {
             background-color: #a72896; 
             border: none;
@@ -34,7 +25,18 @@
         }
 
         .navbar .btn-profile:hover {
-            background-color: #a72896; 
+            background-color: #8b1e7a; /* Darker Purple */
+        }
+
+        /* Course Dashboard Button (Orange) */
+        .navbar .btn-course-dashboard {
+            background-color: #ff6600; /* Orange */
+            border: none;
+            color: white;
+        }
+
+        .navbar .btn-course-dashboard:hover {
+            background-color: #cc5200; /* Darker Orange */
         }
 
         .progress {
@@ -68,9 +70,8 @@
             <a class="navbar-brand" href="#">E-Pathshala</a>
             <div>
                 <a href="/" class="btn btn-primary">Home</a>
-                <a href="/dashboard" class="btn btn-success">Dashboard</a> <!-- Green Dashboard -->
-                <a class="btn btn-profile me-2" href="{{ url_for('main.profile') }}">Profile</a> <!-- Updated Green Profile Button -->
-                <a class="btn btn-profile me-2" href="{{ url_for('main.course_dashboard') }}">Course Dashboard</a>
+                <a class="btn btn-profile me-2" href="{{ url_for('main.profile') }}">Profile</a> <!-- Purple Profile -->
+                <a class="btn btn-course-dashboard me-2" href="{{ url_for('main.course_dashboard') }}">Course Dashboard</a> <!-- Orange Course Dashboard -->
                 <a href="/logout" class="btn btn-danger">Logout</a>
             </div>
         </div>
