@@ -224,3 +224,14 @@ def course_detail(course_id):
         return redirect(url_for('main.dashboard'))
     
     return render_template('course_detail.html', course=course, user=user)
+
+@main.route('/get_progress')
+def get_progress():
+    # Fetch progress data from the database
+    progress_data = {}
+    enrollments = Enrollment.query.all()  # Assuming you have an Enrollment table
+
+    for enrollment in enrollments:
+        progress_data[enrollment.course_name] = enrollment.progress
+
+    return jsonify(progress_data)

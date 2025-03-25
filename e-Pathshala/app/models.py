@@ -51,7 +51,7 @@ class Enrollment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
     student_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    progress = db.Column(db.Integer, default=0, nullable=False)  # Added default=0
+    progress = db.Column(db.Integer, default=0)
     
     student = db.relationship('User', back_populates='enrollments')
     course = db.relationship('Course', back_populates='enrollments')
