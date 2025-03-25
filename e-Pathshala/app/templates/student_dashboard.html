@@ -26,6 +26,17 @@
             background-color: #218838; /* Darker Green */
         }
 
+        /* Updated Profile Button (Purple) */
+        .navbar .btn-profile {
+            background-color: #a72896; 
+            border: none;
+            color: white;
+        }
+
+        .navbar .btn-profile:hover {
+            background-color: #a72896; 
+        }
+
         .progress {
             height: 20px;
         }
@@ -70,6 +81,7 @@
             <div>
                 <a href="/" class="btn btn-primary">Home</a>
                 <a href="/dashboard" class="btn btn-success">Dashboard</a> <!-- Green Dashboard -->
+                <a class="btn btn-profile me-2" href="{{ url_for('main.profile') }}">Profile</a> <!-- Updated Green Profile Button -->
                 <a href="/logout" class="btn btn-danger">Logout</a>
             </div>
         </div>

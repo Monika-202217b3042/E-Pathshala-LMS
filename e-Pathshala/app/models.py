@@ -12,6 +12,8 @@ class User(db.Model):
     enrollments = db.relationship('Enrollment', back_populates='student')
     posts = db.relationship('Post', backref='author', lazy='dynamic')
 
+    
+
     def __init__(self, username, password, is_instructor=False):
         self.username = username
         self.password_hash = generate_password_hash(password)

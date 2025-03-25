@@ -183,3 +183,14 @@ def enrollments():
     enrollments = Enrollment.query.filter(Enrollment.course.has(instructor_id=user.id)).all()
     
     return render_template('enrollments.html', enrollments=enrollments)
+
+@main.route('/profile')
+def profile():
+    user = get_current_user()
+    if 'user_id' not in session:
+        return redirect(url_for('login'))  # Redirect to login if not logged in
+
+    user = User.query.get(session['user_id'])  # Fetch user from database
+    return render_template('profile.html', user=user)
+
+    
