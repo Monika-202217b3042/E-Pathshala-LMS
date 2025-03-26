@@ -88,8 +88,9 @@ def register():
 
 @main.route('/logout')
 def logout():
-    session.clear()
-    return redirect(url_for('main.index'))
+    session.pop('user_id', None)  # Remove user session
+    flash("You have been logged out.", "info")
+    return render_template('logout.html')
 
 @main.route('/create-course', methods=['GET', 'POST'])
 def create_course():
